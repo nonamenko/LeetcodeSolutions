@@ -1,15 +1,25 @@
+from typing import List
+
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
-        nums2 = [[nums[i], i] for i in range(len(nums))]
-        nums2.sort()
-        print(nums2)
-        i = 0
-        j = 1
-        while (i < len(nums2) - 1):
-            while (j < len(nums2) and nums2[i][0] + nums2[j][0] < target): j += 1
-            if j < len(nums) and nums2[i][0] + nums2[j][0] == target:
-                return [nums2[i][1], nums2[j][1]]
-            i += 1
-            j = i + 1
-        return [0, 1]
-        
+        seen = {}
+        for i, num in enumerate(nums):
+            complement = target - num
+            if complement in seen:
+                return [seen[complement], i]
+            seen[num] = i
+        return []
+
+    def twoSumAllPairs(self, nums: List[int], target: int) -> List[List[int]]:
+        seen = {}
+        pairs = []
+        for i, num in enumerate(nums):
+            complement = target - num
+            if complement in seen:
+                for j in seen[complement]:
+                    pairs.append([j, i])
+            if num in seen:
+                seen[num].append(i)
+            else:
+                seen[num] = [i]
+        return pairs
